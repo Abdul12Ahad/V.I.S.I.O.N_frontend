@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V.I.S.I.O.N</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            V.I.S.I.O.N
+        </div>
+    </header>
+
+    <main>
+
+        <section class="hero">
+
+            <h1>
+                Curiosity Begins With Observation.
+            </h1>
+
+            <p>
+                Point at the world. Discover how it works.
+            </p>
+
+        </section>
+
+        <section class="action-area">
+
+            <input
+                type="file"
+                id="imageInput"
+                hidden
+            >
+
+            <label
+                for="imageInput"
+                class="upload-btn"
+            >
+                Choose Image
+            </label>
+
+            <button
+                type="button"
+                onclick="uploadImage()"
+                class="analyze-btn"
+            >
+                Analyze
+            </button>
+
+        </section>
+
+        <section class="result-section">
+
+            <pre id="result"></pre>
+
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
