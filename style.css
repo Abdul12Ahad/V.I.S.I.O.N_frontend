@@ -404,3 +404,162 @@ body::after{
         transform:scale(1);
     }
 }
+
+.result-card{
+
+    margin-bottom:25px;
+
+    padding:20px;
+
+    border-radius:16px;
+
+    background:rgba(255,255,255,0.04);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    transition:0.3s;
+}
+
+.result-card:hover{
+
+    transform:translateY(-2px);
+
+    background:rgba(255,255,255,0.06);
+}
+
+.result-card h2{
+
+    margin-bottom:12px;
+
+    color:white;
+}
+
+.result-card p,
+.result-card li{
+
+    line-height:1.8;
+
+    color:rgba(255,255,255,0.85);
+}
+
+.result-card ul{
+
+    margin-left:20px;
+}
+
+/* ---------------- FOLLOW-UP CHAT ---------------- */
+
+#followupSection{
+
+    margin-top:40px;
+
+    width:100%;
+
+    text-align:left;
+}
+
+#followupSection h2{
+
+    margin-bottom:18px;
+
+    font-size:1.2rem;
+
+    font-weight:600;
+
+    color:white;
+}
+
+.followup-input-wrapper{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:10px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,0.04);
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    backdrop-filter:blur(12px);
+
+    transition:0.3s;
+}
+
+.followup-input-wrapper:focus-within{
+
+    border-color:rgba(120,160,255,0.4);
+
+    box-shadow:
+        0 0 20px rgba(80,120,255,0.12);
+}
+
+#questionInput{
+
+    flex:1;
+
+    border:none;
+
+    outline:none;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:1rem;
+
+    padding:12px;
+}
+
+#questionInput::placeholder{
+
+    color:rgba(255,255,255,0.45);
+}
+
+.ask-btn{
+
+    border:none;
+
+    cursor:pointer;
+
+    padding:12px 24px;
+
+    border-radius:14px;
+
+    font-size:0.95rem;
+
+    font-weight:600;
+
+    color:white;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(70,120,255,0.9),
+            rgba(120,80,255,0.9)
+        );
+
+    transition:0.3s;
+}
+
+.ask-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 8px 25px rgba(80,120,255,0.25);
+}
+
+.ask-btn:active{
+
+    transform:scale(0.98);
+}
+
+#answerContainer{
+
+    margin-top:20px;
+}

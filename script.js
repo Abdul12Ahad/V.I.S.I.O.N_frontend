@@ -1,3 +1,5 @@
+let currentAnalysis = "";
+
 document
     .getElementById("imageInput")
     .addEventListener(
@@ -104,55 +106,105 @@ async function uploadImage() {
         const data =
             await response.json();
 
+        currentAnalysis = `
+            Description:
+            ${data.description}
+
+            What It Is:
+            ${data.what_it_is}
+
+            How It Works:
+            ${data.how_it_works}
+
+            Why Important:
+            ${data.why_important}
+
+            Fun Fact:
+            ${data.fun_fact}
+            `;
+
     result.innerHTML = `
 
-        <h2>Description</h2>
-        <p>${data.description}</p>
+        <div class="result-card">
 
-        <h2>What It Is</h2>
-        <p>${data.what_it_is}</p>
+            <h2>Description</h2>
+            <p>${data.description}</p>
 
-        <h2>How It Works</h2>
-        <p>${data.how_it_works}</p>
+        </div>
 
-        <h2>Why It Is Important</h2>
-        <p>${data.why_important}</p>
+        <div class="result-card">
 
-        <h2>Fun Fact</h2>
-        <p>${data.fun_fact}</p>
+            <h2>What It Is</h2>
+            <p>${data.what_it_is}</p>
 
-        <hr>
+        </div>
 
-        <h2>Key Concepts</h2>
-        <ul>
-            ${data.key_concepts
-                .map(item => `<li>${item}</li>`)
-                .join("")}
-        </ul>
+        <div class="result-card">
 
-        <h2>Related Topics</h2>
-        <ul>
-            ${data.related_topics
-                .map(item => `<li>${item}</li>`)
-                .join("")}
-        </ul>
+            <h2>How It Works</h2>
+            <p>${data.how_it_works}</p>
 
-        <h2>Learn More</h2>
-        <ul>
-            ${data.learn_more
-                .map(item => `<li>${item}</li>`)
-                .join("")}
-        </ul>
+        </div>
 
-        <hr>
+        <div class="result-card">
 
-        <h2>Image Information</h2>
+            <h2>Why It Is Important</h2>
+            <p>${data.why_important}</p>
 
-        <p><strong>Width:</strong> ${data.width}px</p>
+        </div>
 
-        <p><strong>Height:</strong> ${data.height}px</p>
+        <div class="result-card">
 
-        <p><strong>Size:</strong> ${data.size_kb} KB</p>
+            <h2>Fun Fact</h2>
+            <p>${data.fun_fact}</p>
+
+        </div>
+
+        <div class="result-card">
+
+            <h2>Key Concepts</h2>
+
+            <ul>
+                ${data.key_concepts
+                    .map(item => `<li>${item}</li>`)
+                    .join("")}
+            </ul>
+
+        </div>
+
+        <div class="result-card">
+
+            <h2>Related Topics</h2>
+
+            <ul>
+                ${data.related_topics
+                    .map(item => `<li>${item}</li>`)
+                    .join("")}
+            </ul>
+
+        </div>
+
+        <div class="result-card">
+
+            <h2>Learn More</h2>
+
+            <ul>
+                ${data.learn_more
+                    .map(item => `<li>${item}</li>`)
+                    .join("")}
+            </ul>
+
+        </div>
+
+        <div class="result-card">
+
+            <h2>Image Information</h2>
+
+            <p><strong>Width:</strong> ${data.width}px</p>
+            <p><strong>Height:</strong> ${data.height}px</p>
+            <p><strong>Size:</strong> ${data.size_kb} KB</p>
+
+        </div>
 
     `;
 
@@ -178,4 +230,59 @@ async function uploadImage() {
 
         analyzeBtn.disabled = false;
     }
+}
+
+async function askQuestion() {
+
+    const question =
+        document.getElementById(
+            "questionInput"
+        ).value;
+
+    if (!question) return;
+
+    const answerContainer =
+        document.getElementById(
+            "answerContainer"
+        );
+
+    answerContainer.innerHTML =
+        "Thinking...";
+
+    const response =
+        await fetch(
+            "http://127.0.0.1:8000/ask",
+            {
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    context:
+                        currentAnalysis,
+
+                    question:
+                        question
+                })
+            }
+        );
+
+    const data =
+        await response.json();
+
+    answerContainer.innerHTML = `
+
+        <div class="result-card">
+
+            <h2>Answer</h2>
+
+            <p>${data.answer}</p>
+
+        </div>
+
+    `;
 }
