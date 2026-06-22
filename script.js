@@ -1,4 +1,6 @@
 let currentAnalysis = "";
+let speechUtterance = null;
+let isSpeaking = false;
 
 document
     .getElementById("imageInput")
@@ -127,12 +129,27 @@ async function uploadImage() {
 
         <div class="result-card">
 
+            <button
+                class="card-audio-btn"
+                onclick="speakCard(this)"
+                data-text="${data.description}"
+            >
+                🔊
+            </button>
             <h2>Description</h2>
             <p>${data.description}</p>
 
         </div>
 
         <div class="result-card">
+
+            <button
+                class="card-audio-btn"
+                onclick="speakCard(this)"
+                data-text="${data.what_it_is}"
+            >
+                🔊
+            </button>
 
             <h2>What It Is</h2>
             <p>${data.what_it_is}</p>
@@ -141,6 +158,13 @@ async function uploadImage() {
 
         <div class="result-card">
 
+        <button
+            class="card-audio-btn"
+            onclick="speakCard(this)"
+            data-text="${data.how_it_works}"
+        >
+            🔊
+        </button>
             <h2>How It Works</h2>
             <p>${data.how_it_works}</p>
 
@@ -148,6 +172,13 @@ async function uploadImage() {
 
         <div class="result-card">
 
+            <button
+                class="card-audio-btn"
+                onclick="speakCard(this)"
+                data-text="${data.why_important}"
+            >
+                🔊
+            </button>
             <h2>Why It Is Important</h2>
             <p>${data.why_important}</p>
 
@@ -155,6 +186,13 @@ async function uploadImage() {
 
         <div class="result-card">
 
+            <button
+                class="card-audio-btn"
+                onclick="speakCard(this)"
+                data-text="${data.fun_fact}"
+            >
+                🔊
+            </button>
             <h2>Fun Fact</h2>
             <p>${data.fun_fact}</p>
 
@@ -162,6 +200,14 @@ async function uploadImage() {
 
         <div class="result-card">
 
+        <button
+            class="card-audio-btn"
+            onclick="speakCard(this)"
+            data-text="${data.key_concepts.join(', ')}"
+        >
+            🔊
+        </button>
+        
             <h2>Key Concepts</h2>
 
             <ul>
@@ -173,6 +219,14 @@ async function uploadImage() {
         </div>
 
         <div class="result-card">
+
+            <button
+                class="card-audio-btn"
+                onclick="speakCard(this)"
+                data-text="${data.related_topics.join(', ')}"
+            >
+                🔊
+            </button>
 
             <h2>Related Topics</h2>
 
@@ -186,6 +240,14 @@ async function uploadImage() {
 
         <div class="result-card">
 
+            <button
+                class="card-audio-btn"
+                onclick="speakCard(this)"
+                data-text="${data.learn_more.join(', ')}"
+            >
+                🔊
+            </button>
+            
             <h2>Learn More</h2>
 
             <ul>
@@ -285,4 +347,133 @@ async function askQuestion() {
         </div>
 
     `;
+}
+
+let historyOpen = false;
+
+async function toggleHistory() {
+
+    const sidebar =
+        document.getElementById(
+            "historySidebar"
+        );
+
+    const button =
+        document.getElementById(
+            "historyToggle"
+        );
+
+    historyOpen =
+        !historyOpen;
+
+    if (historyOpen) {
+
+            sidebar.classList.add(
+                "open"
+            );
+
+            button.classList.add(
+                "open"
+            );
+
+            button.textContent = "✕";
+
+            await loadHistory();
+        }
+        else {
+
+            sidebar.classList.remove(
+                "open"
+            );
+
+            button.classList.remove(
+                "open"
+            );
+
+            button.textContent = "☰";
+        }
+}
+
+async function loadHistory() {
+
+    const historyContainer =
+        document.getElementById(
+            "historyContainer"
+        );
+
+    historyContainer.innerHTML =
+        "Loading...";
+
+    const response =
+        await fetch(
+            "http://127.0.0.1:8000/history"
+        );
+
+    const history =
+        await response.json();
+
+    historyContainer.innerHTML =
+        history.map(item => `
+
+            <div class="result-card">
+
+                <h3>${item.image_name}</h3>
+
+                <p>
+                    ${item.created_at}
+                </p>
+
+                <p>
+                    ${item.description}
+                </p>
+
+            </div>
+
+        `).join("");
+}
+
+function speakCard(button) {
+
+    if (
+        speechSynthesis.speaking &&
+        activeButton === button
+    ) {
+
+        speechSynthesis.cancel();
+
+        button.textContent = "🔈";
+
+        activeButton = null;
+
+        return;
+    }
+
+    speechSynthesis.cancel();
+
+    document
+        .querySelectorAll(".card-audio-btn")
+        .forEach(btn => {
+            btn.textContent = "🔈";
+        });
+
+    activeButton = button;
+
+    button.textContent = "🔊";
+
+    const text =
+        button.dataset.text;
+
+    const utterance =
+        new SpeechSynthesisUtterance(text);
+
+    utterance.rate = 1;
+
+    utterance.onend = () => {
+
+        button.textContent = "🔈";
+
+        activeButton = null;
+    };
+
+    speechSynthesis.speak(utterance);
 }

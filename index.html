@@ -13,6 +13,13 @@
         <div class="logo">
             V.I.S.I.O.N
         </div>
+
+        <button
+        id="historyToggle"
+        class="history-toggle"
+        onclick="toggleHistory()">
+            ☰
+        </button>
     </header>
 
     <main>
@@ -52,7 +59,6 @@
             >
                 Analyze
             </button>
-
         </section>
 
         <section class="preview-section">
@@ -110,6 +116,11 @@
 
     </main>
 
+    <div id="historySidebar">
+        <h2>Analysis History</h2>
+        <div id="historyContainer"></div>
+    </div>
+    
     <script src="script.js"></script>
 
 </body>
