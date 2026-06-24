@@ -9,6 +9,19 @@ document
         showPreview
     );
 
+document
+    .getElementById("questionInput")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                askQuestion();
+            }
+        }
+    );
+
 function showPreview() {
 
     const file =
@@ -17,6 +30,38 @@ function showPreview() {
             .files[0];
 
     if (!file) return;
+
+    const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+
+            alert(
+                "Only JPG, PNG and WEBP images are allowed."
+            );
+
+            document
+                .getElementById("imageInput")
+                .value = "";
+
+            return;
+        }
+
+        if (file.size > 10 * 1024 * 1024) {
+
+            alert(
+                "Image size must be under 10 MB."
+            );
+
+            document
+                .getElementById("imageInput")
+                .value = "";
+
+            return;
+        }
 
     const imageUrl =
         URL.createObjectURL(file);
@@ -277,22 +322,41 @@ async function uploadImage() {
 
         result.innerHTML = `
 
-            <h2>Error</h2>
+            <div class="result-card">
 
-            <p>
-                Failed to analyze image.
-                Please try again.
-            </p>
+                <h2>⚠ Error</h2>
+
+                <p>
+
+                    Unable to connect to the AI service.
+
+                    Please make sure:
+
+                    <br><br>
+
+                    • Backend is running
+
+                    <br>
+
+                    • Ollama is running
+
+                    <br>
+
+                    • Internet/network connection is available
+
+                </p>
+
+            </div>
 
         `;
     }
-    finally {
+        finally {
 
-        loading.style.display = "none";
+            loading.style.display = "none";
 
-        analyzeBtn.disabled = false;
+            analyzeBtn.disabled = false;
+        }
     }
-}
 
 async function askQuestion() {
 
@@ -301,7 +365,14 @@ async function askQuestion() {
             "questionInput"
         ).value;
 
-    if (!question) return;
+    if (!question.trim()) {
+
+        alert(
+            "Please enter a question."
+        );
+
+        return;
+    }
 
     const answerContainer =
         document.getElementById(
@@ -335,6 +406,10 @@ async function askQuestion() {
 
     const data =
         await response.json();
+
+    document
+    .getElementById("questionInput")
+    .value = "";
 
     answerContainer.innerHTML = `
 
